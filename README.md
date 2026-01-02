@@ -4,50 +4,48 @@ A beautiful CLI tool to generate Goravel projects from a template with custom mo
 
 ## Features
 
-- 🎨 Beautiful colored output with emojis
-- 🚀 Quick project generation from template
-- 🔄 Automatic module name replacement
-- 📁 Preserves directory structure
-- ✨ User-friendly interface
-- 📦 **Standalone binary** - Template is embedded, no external files needed
+-   🎨 Beautiful colored output with emojis
+-   🚀 Quick project generation from template
+-   🌐 **Downloads template** - Always fetches the latest template from GitHub
+-   🔄 **Dynamic module detection** - Automatically detects and replaces the old module name
+-   📁 Preserves directory structure and `go.mod` dependencies
+-   ✨ User-friendly interface
 
 ## Installation
 
-```bash
-go build -o goraveltpl.exe
-```
+To install the latest version:
 
-Or install globally:
 ```bash
-go install
+go install github.com/mmycin/Goravel-Blueprint/cmd/goraveltpl@latest
 ```
 
 ## Usage
 
-Simply run the `new` command and you'll be prompted interactively:
+Simply run the `goraveltpl` command and you'll be prompted interactively:
 
 ```bash
 goraveltpl new
 ```
 
 The CLI will prompt you for:
-- **Project name**: The name of your project folder
-- **Module Name**: The Go module path (e.g., `github.com/username/my-project`)
+
+-   **Project name**: The name of your project folder
+-   **Module Name**: The Go module path (e.g., `github.com/username/my-project`)
 
 ## Requirements
 
-- Go 1.21 or higher (for building)
-- The compiled binary is **standalone** - no external template files needed at runtime
+-   Go 1.21 or higher (for building)
+-   Internet connection (to download the template)
 
 ## What it does
 
 1. Creates a new project folder with the specified project name
-2. Extracts the embedded `repo.zip` template archive into the new project
-3. Replaces all occurrences of `github.com/mmycin/goravel-test` with your module name in all files
-4. Generates `go.mod` with your module name
-5. Preserves file permissions and directory structure
-
-**Note:** The template is embedded as `repo.zip` in the binary during compilation, so the compiled `goraveltpl` binary is completely standalone and doesn't require any external files when running.
+2. Downloads the latest `goravel-template.zip` from GitHub
+3. Extracts the template archive into the new project
+4. Detects the module name used in the template's `go.mod`
+5. Replaces all occurrences of the old module name with your new module name in all files
+6. Preserves the original `go.mod` (with updated module name) and its dependencies
+7. Preserves file permissions and directory structure
 
 ## Example
 
@@ -63,12 +61,15 @@ Enter Module Name > github.com/john/myapp
 
 ℹ️  Project Name: myapp
 ℹ️  Module Name: github.com/john/myapp
-ℹ️  Template: Embedded in binary
+ℹ️  Template: https://github.com/mmycin/Goravel-Blueprint/releases/download/Template/goravel-template.zip
 ℹ️  Output: myapp
 
-  📁 Created directory: app
-  📁 Created directory: app/http
-  ✓ Created file: .gitkeep
+ℹ️  Downloading template...
+✅ Template downloaded successfully
+ℹ️  Detected template module: github.com/mmycin/goravel_test
+
+  ✓ Created file: go.mod
+  ✓ Created file: main.go
   ...
 
 ════════════════════════════════════════════════════════
@@ -77,7 +78,6 @@ Enter Module Name > github.com/john/myapp
 Next steps:
   cd myapp
   go mod tidy
-  go run main.go
+  go run .
 ════════════════════════════════════════════════════════
 ```
-

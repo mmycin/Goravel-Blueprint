@@ -6,16 +6,12 @@ import (
 	"os"
 	"strings"
 
+	"github.com/mmycin/Goravel-Blueprint/internal/template"
+	"github.com/mmycin/Goravel-Blueprint/internal/utils"
+
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
-	"goraveltpl/internal/template"
 )
-
-var embeddedZip []byte
-
-func SetEmbeddedZip(zipData []byte) {
-	embeddedZip = zipData
-}
 
 var newCmd = &cobra.Command{
 	Use:   "new",
@@ -78,12 +74,21 @@ You will be prompted to enter:
 
 		info(fmt.Sprintf("Project Name: %s", projectName))
 		info(fmt.Sprintf("Module Name: %s", moduleName))
-		info(fmt.Sprintf("Template: Embedded in binary"))
+		info("Template: https://github.com/mmycin/Goravel-Blueprint/releases/download/Template/goravel-template.zip")
 		info(fmt.Sprintf("Output: %s", projectDir))
 		fmt.Println()
 
+		// Download template
+		info("Downloading template...")
+		templateUrl := "https://github.com/mmycin/Goravel-Blueprint/releases/download/Template/goravel-template.zip"
+		zipData, err := utils.DownloadFile(templateUrl)
+		if err != nil {
+			er(fmt.Sprintf("Failed to download template: %v", err))
+		}
+		success("Template downloaded successfully")
+
 		// Process template
-		processor := template.NewProcessor(embeddedZip, projectDir, moduleName)
+		processor := template.NewProcessor(zipData, projectDir, moduleName)
 		if err := processor.Process(); err != nil {
 			er(err.Error())
 		}
@@ -99,4 +104,3 @@ You will be prompted to enter:
 		color.New(color.FgGreen, color.Bold).Println(strings.Repeat("═", 60))
 	},
 }
-

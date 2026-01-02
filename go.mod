@@ -1,4 +1,4 @@
-module goraveltpl
+module github.com/mmycin/Goravel-Blueprint
 
 go 1.21
 

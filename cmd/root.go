@@ -46,4 +46,3 @@ func info(msg string) {
 func warn(msg string) {
 	color.New(color.FgYellow).Println("⚠️ ", msg)
 }
-
